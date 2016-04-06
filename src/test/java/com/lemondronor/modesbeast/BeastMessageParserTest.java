@@ -1,5 +1,6 @@
 package com.lemondronor.modesbeast;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -27,21 +28,26 @@ public class BeastMessageParserTest {
     System.err.println("  packet " + spec.packet1);
 
     BeastMessageParser parser = new BeastMessageParser();
+    ExtractedBytes e1 = null;
     List<ExtractedBytes> extracteds = getExtractedBytesForPackets(
         parser,
         spec.packet1,
         spec.packet2);
-    ExtractedBytes e1 = extracteds.get(0);
-    ExtractedBytes e2 = extracteds.get(1);
-    assertEquals(spec.extracted1, e1.getByteArray());
+    e1 = extracteds.get(0);
+    assertArrayEquals(spec.extracted1, e1.getByteArray());
     assertEquals(spec.hasParity1, e1.hasParity);
+    ExtractedBytes e2 = null;
+    if (extracteds.size() > 1) {
+      e2 = extracteds.get(1);
+    }
     if (spec.extracted2 != null) {
       assertNotNull(e2);
-      assertEquals(spec.extracted2, e2.getByteArray());
+      assertArrayEquals(spec.extracted2, e2.getByteArray());
       assertEquals(spec.hasParity2, e2.hasParity);
     } else {
       assertNull(e2);
     }
+    System.err.println("**************************************** Test passed: " + spec.comment);
   }
 
   private List<ExtractedBytes> getExtractedBytesForPackets(

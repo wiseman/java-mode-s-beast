@@ -71,7 +71,26 @@ public class BeastMessageParser {
               hasParity || isBinaryFormat);
           result.add(extractedBytes);
         }
+        startOfPacket = findStartIndex(firstByteAfterLastValidPacket);
       }
+
+      if (firstByteAfterLastValidPacket != ArrayUtils.INDEX_NOT_FOUND) {
+        int unusedBytesCount = readBufferLength - firstByteAfterLastValidPacket;
+        if (unusedBytesCount > 0) {
+          if (unusedBytesCount > 1024) {
+            unusedBytesCount = 0;
+          } else {
+            for (int si = firstByteAfterLastValidPacket, di = 0; di < unusedBytesCount; ++si, ++di) {
+              readBuffer[di] = readBuffer[si];
+            }
+          }
+        }
+        readBufferLength = unusedBytesCount;
+      }
+    }
+    System.err.println("  Returning " + result.size() + " packets");
+    for (ExtractedBytes e : result) {
+      System.err.println("    " + e.bytes.length);
     }
     return result;
   }

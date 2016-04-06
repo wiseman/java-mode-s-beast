@@ -24,17 +24,23 @@ public class BeastMessageParserTest {
   }
 
   private void checkTestSpec(TestSpec spec) {
+    System.err.println("Test: " + spec.comment);
     BeastMessageParser parser = new BeastMessageParser();
     ExtractedBytes e1 = null;
     List<ExtractedBytes> extracteds = getExtractedBytesForPackets(
         parser,
         spec.packet1,
         spec.packet2);
-    e1 = extracteds.get(0);
-    assertArrayEquals(
-        desc(spec.comment, spec.extracted1, e1.getByteArray()),
-        spec.extracted1, e1.getByteArray());
-    assertEquals(spec.hasParity1, e1.hasParity);
+    if (extracteds.size() > 0) {
+      e1 = extracteds.get(0);
+    }
+    if (spec.extracted1 != null) {
+      assertNotNull(e1);
+      assertArrayEquals(
+          desc(spec.comment, spec.extracted1, e1.getByteArray()),
+          spec.extracted1, e1.getByteArray());
+      assertEquals(spec.hasParity1, e1.hasParity);
+    }
     ExtractedBytes e2 = null;
     if (extracteds.size() > 1) {
       e2 = extracteds.get(1);

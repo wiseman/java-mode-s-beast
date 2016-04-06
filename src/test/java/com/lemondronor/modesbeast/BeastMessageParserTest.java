@@ -24,9 +24,6 @@ public class BeastMessageParserTest {
   }
 
   private void checkTestSpec(TestSpec spec) {
-    System.err.println("Checking " + spec.comment);
-    System.err.println("  packet " + spec.packet1);
-
     BeastMessageParser parser = new BeastMessageParser();
     ExtractedBytes e1 = null;
     List<ExtractedBytes> extracteds = getExtractedBytesForPackets(
@@ -34,7 +31,9 @@ public class BeastMessageParserTest {
         spec.packet1,
         spec.packet2);
     e1 = extracteds.get(0);
-    assertArrayEquals(spec.extracted1, e1.getByteArray());
+    assertArrayEquals(
+        desc(spec.comment, spec.extracted1, e1.getByteArray()),
+        spec.extracted1, e1.getByteArray());
     assertEquals(spec.hasParity1, e1.hasParity);
     ExtractedBytes e2 = null;
     if (extracteds.size() > 1) {
@@ -42,12 +41,13 @@ public class BeastMessageParserTest {
     }
     if (spec.extracted2 != null) {
       assertNotNull(e2);
-      assertArrayEquals(spec.extracted2, e2.getByteArray());
+      assertArrayEquals(
+          desc(spec.comment, spec.extracted2, e2.getByteArray()),
+          spec.extracted2, e2.getByteArray());
       assertEquals(spec.hasParity2, e2.hasParity);
     } else {
       assertNull(e2);
     }
-    System.err.println("**************************************** Test passed: " + spec.comment);
   }
 
   private List<ExtractedBytes> getExtractedBytesForPackets(
@@ -63,5 +63,25 @@ public class BeastMessageParserTest {
         extracteds1.stream(),
         extracteds2.stream());
     return extracteds.collect(Collectors.toList());
+  }
+
+  private String desc(String comment, byte[] bytes1, byte[] bytes2) {
+    return ("Test: '" + comment + "', "
+            + "expected: [" + arrayToString(bytes1) + "] "
+            + "actual: [" + arrayToString(bytes2) + "]");
+  }
+
+  private String arrayToString(byte[] bytes) {
+    StringBuilder sb = new StringBuilder();
+    boolean first = true;
+    for (int b : bytes) {
+      if (!first) {
+        sb.append(" ");
+      } else {
+        first = false;
+      }
+      sb.append(String.format("%02X", b & 0xff));
+    }
+    return sb.toString();
   }
 }

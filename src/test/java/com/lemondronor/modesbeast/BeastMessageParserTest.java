@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -14,16 +16,26 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
+@RunWith(Parameterized.class)
 public class BeastMessageParserTest {
-  @Test
-  public void loadTests() {
+
+  private TestSpec testSpec;
+
+  @Parameterized.Parameters
+  public static Collection<Object[]> loadTests() {
     Collection<TestSpec> specs = TestSpec.readFromFile("beast-binary-test-cases.yaml");
-    for (TestSpec spec : specs) {
-      checkTestSpec(spec);
-    }
+    return specs.stream()
+        .map(s -> new Object[] { s, null })
+        .collect(Collectors.toList());
   }
 
-  private void checkTestSpec(TestSpec spec) {
+  public BeastMessageParserTest(TestSpec spec, Object _) {
+    testSpec = spec;
+  }
+
+  @Test
+  public void checkTestSpec() {
+    TestSpec spec = testSpec;
     System.err.println("Test: " + spec.comment);
     BeastMessageParser parser = new BeastMessageParser();
     ExtractedBytes e1 = null;

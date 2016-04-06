@@ -88,10 +88,6 @@ public class BeastMessageParser {
         readBufferLength = unusedBytesCount;
       }
     }
-    System.err.println("  Returning " + result.size() + " packets");
-    for (ExtractedBytes e : result) {
-      System.err.println("    " + e.bytes.length);
-    }
     return result;
   }
 

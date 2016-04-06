@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 public class BeastMessageParser {
+  static final int ESCAPE = 0x1A;
+
   private byte[] readBuffer;
   private int readBufferLength;
   private byte[] payload;
@@ -128,7 +130,7 @@ public class BeastMessageParser {
   private boolean establishStreamFormat() {
     if (!streamFormatIsEstablished) {
       isBinaryFormat = ArrayUtils.indexOf(
-          readBuffer, (byte) 0x1a, 0, readBufferLength) != ArrayUtils.INDEX_NOT_FOUND;
+          readBuffer, (byte) ESCAPE, 0, readBufferLength) != ArrayUtils.INDEX_NOT_FOUND;
       if (isBinaryFormat) {
         streamFormatIsEstablished = true;
       } else if (readBufferLength > 22) {
@@ -175,9 +177,9 @@ public class BeastMessageParser {
     } else {
       for (int i = start; i < readBufferLength; ++i) {
         byte ch = readBuffer[i];
-        if (ch == 0x1a) {
+        if (ch == ESCAPE) {
           if (++i < readBufferLength) {
-            if (readBuffer[i] != 0x1a) {
+            if (readBuffer[i] != ESCAPE) {
               result = i;
               break;
             }
@@ -209,13 +211,13 @@ public class BeastMessageParser {
     int di = 0;
     for (; si < readBufferLength && di < 7; ++si, ++di) {
       byte ch = readBuffer[si];
-      if (ch == 0x1a && ++si > readBufferLength) {
+      if (ch == ESCAPE && ++si > readBufferLength) {
         break;
       }
     }
     for (di = 0; si < readBufferLength && di < dataLength; ++si) {
       byte ch = readBuffer[si];
-      if (ch == 0x1a) {
+      if (ch == ESCAPE) {
         if (++si >= readBufferLength) {
           break;
         }

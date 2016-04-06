@@ -1,0 +1,160 @@
+-
+    Packet1: 00 1A 32 01 02 03 04 05 06 FF 91 92 93 94 95 96 97
+    Packet2:
+    Extracted1: 91 92 93 94 95 96 97
+    HasParity1: true
+    BadChecksum1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Short frame binary format
+-
+    Packet1: 1A 32 01 02 03 04 05 06 FF 91 92 93 94 95 96 97
+    Packet2: 1A 32 01 02 03 04 05 06 07 81 82 83 84 85 86 87
+    Extracted1: 81 82 83 84 85 86 87
+    HasParity1: true
+    BadChecksum1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Short frame, cannot be sure first packet start is not middle of packet
+-
+    Packet1: 00 1A 32 01 02 03 04 05 06 FF 91 92 93 94 95 96
+    Packet2: "97"
+    Extracted1: 91 92 93 94 95 96 97
+    HasParity1: true
+    BadChecksum1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Short frame, payload split over two blobs
+-
+    Packet1: 00 1A 32 01 02 03 04 05 06 FF 91 92 93 94 95 1A 1A 97
+    Packet2:
+    Extracted1: 91 92 93 94 95 1A 97
+    HasParity1: true
+    BadChecksum1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Short frame, payload contains escaped value
+-
+    Packet1: 00 1A 32 01 02 03 04 05 06 FF 91 92 93 94 95 96 1A
+    Packet2: 1A
+    Extracted1: 91 92 93 94 95 96 1A
+    HasParity1: true
+    BadChecksum1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Short frame, payload has escaped value over two blobs
+-
+    Packet1: 00 1A 32 1A 1A 02 03 04 05 06 FF 91 92 93 94 95 96 97
+    Packet2:
+    Extracted1: 91 92 93 94 95 96 97
+    HasParity1: true
+    BadChecksum1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Short frame, escaped value in MLAT timer
+-
+    Packet1: 00 1A 32 01 02 03 04 05 06 1A 1A 91 92 93 94 95 96 97
+    Packet2:
+    Extracted1: 91 92 93 94 95 96 97
+    HasParity1: true
+    BadChecksum1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Short frame, escaped value in signal strength
+-
+    Packet1: 00 1A 33 01 02 03 04 05 06 FF 91 92 93 94 95 96 97 98 99 9A 9B 9C 9D 9E
+    Packet2:
+    Extracted1: 91 92 93 94 95 96 97 98 99 9A 9B 9C 9D 9E
+    HasParity1: true
+    BadChecksum1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Long frame binary format
+-
+    Packet1: 00 1A 33 01 02 03 04 05 06 FF 91 92 93 94 95 96 97 98 99 9A 9B 9C 9D 9E
+    Packet2: 1A 32 01 02 03 04 05 06 07 81 82 83 84 85 86 87
+    Extracted1: 91 92 93 94 95 96 97 98 99 9A 9B 9C 9D 9E
+    HasParity1: true
+    BadChecksum1: false
+    Extracted2: 81 82 83 84 85 86 87
+    HasParity2: true
+    BadChecksum2: false
+    Comment: Long frame followed by short frame
+-
+    Packet1: 00 1A 32 01 02 03 04 05 06 FF 91 92 93 94 95 96 97 1A 32 01 02 03 04 05 06 07 81 82 83 84 85 86 87
+    Packet2:
+    Extracted1: 91 92 93 94 95 96 97
+    HasParity1: true
+    BadChecksum1: false
+    Extracted2: 81 82 83 84 85 86 87
+    HasParity2: true
+    BadChecksum2: false
+    Comment: Two short frames in same blob
+-
+    Packet1: 00 1A 31 01 02 03 04 05 06 FF 01 02 03 04
+    Packet2:
+    Extracted1:
+    HasParity1:
+    BadChecksum1:
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Mode-A/C frame binary format
+-
+    Packet1: 00 1A 31 01 02 03 04 05 06 FF 01 02 03 04 1A 32 01 02 03 04 05 06 FF 91 92 93 94 95 96 97
+    Packet2:
+    Extracted1: 91 92 93 94 95 96 97
+    HasParity1: true
+    BadChecksum1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Mode-A/C frame followed by short frame in same blob
+-
+    Packet1: 00 1A 31 01 02 03 04 05 06 FF 1A 1A 32 03 04 1A 32 01 02 03 04 05 06 FF 91 92 93 94 95 96 97
+    Packet2:
+    Extracted1: 91 92 93 94 95 96 97
+    HasParity1: true
+    BadChecksum1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Mode-A/C frame with 1A 32 escaped in payload followed by short frame in same blob
+-
+    Packet1: 1A 1A 32 01 02 03 1A 1A 32 FF 91 92 93 94 95 96 97 1A 32 01 02 03 04 05 06 FF 21 22 23 24 25 26 27
+    Packet2:
+    Extracted1: 21 22 23 24 25 26 27
+    HasParity1: true
+    BadChecksum1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Partial first frame with escaped 1A 32 followed by full short frame
+-
+    Packet1: 00 2A 00 00 3B 2A 1A 32 01 02 03 04 05 06 FF 91 92 93 94 95 96 97
+    Packet2:
+    Extracted1: 91 92 93 94 95 96 97
+    HasParity1: true
+    BadChecksum1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: 'Tail of first packet looks like AVR format, but isn''t'
+-
+    Packet1: 32 2A 2A 2A 2A 2A 2A FF 01 02 03 04 05 06 07 08 09 2A 2A 2A 2A 2A
+    Packet2: 1A 32 01 02 03 04 05 06 FF 91 92 93 94 95 96 97
+    Extracted1: 91 92 93 94 95 96 97
+    HasParity1: true
+    BadChecksum1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Tail of first packet is longest run of bytes we can have without a 1A in binary format

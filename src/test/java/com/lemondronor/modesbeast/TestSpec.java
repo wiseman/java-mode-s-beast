@@ -17,6 +17,9 @@ public class TestSpec {
   public Boolean badChecksum2;
   public String comment;
 
+  /**
+   * Reads a test suite from a YAML file.
+   */
   public static Collection<TestSpec> readFromFile(String path) {
     LinkedList<TestSpec> specs = new LinkedList<>();
     Yaml yaml = new Yaml();

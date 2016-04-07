@@ -4,6 +4,10 @@ public class ArrayUtils {
 
   static final int INDEX_NOT_FOUND = -1;
 
+  /**
+   * Searches a byte array for a specific value and returns the index.
+   * Returns -1 if the value isn't found.
+   */
   public static int indexOf(final byte[] array, final byte valueToFind, int startIndex,
                             int stopIndex) {
     if (array == null) {

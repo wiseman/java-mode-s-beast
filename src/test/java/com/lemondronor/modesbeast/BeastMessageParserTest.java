@@ -21,6 +21,9 @@ public class BeastMessageParserTest {
 
   private TestSpec testSpec;
 
+  /**
+   * Load test cases from the YAML file.
+   */
   @Parameterized.Parameters
   public static Collection<Object[]> loadTests() {
     Collection<TestSpec> specs = TestSpec.readFromFile("beast-binary-test-cases.yaml");
@@ -29,7 +32,7 @@ public class BeastMessageParserTest {
         .collect(Collectors.toList());
   }
 
-  public BeastMessageParserTest(TestSpec spec, Object _) {
+  public BeastMessageParserTest(TestSpec spec, Object ignore) {
     testSpec = spec;
   }
 

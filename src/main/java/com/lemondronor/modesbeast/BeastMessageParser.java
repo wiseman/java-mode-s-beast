@@ -22,6 +22,10 @@ public class BeastMessageParser {
   public BeastMessageParser() {
   }
 
+  /**
+   * Scans a byte array for Mode S beast messages. Returns a
+   * collection of extracted Mode S payloads.
+   */
   public Collection<ExtractedBytes> parse(byte[] bytes, int offset, int bytesRead) {
     LinkedList<ExtractedBytes> result = new LinkedList<>();
     int length = readBufferLength + bytesRead;
@@ -80,7 +84,9 @@ public class BeastMessageParser {
           if (unusedBytesCount > 1024) {
             unusedBytesCount = 0;
           } else {
-            for (int si = firstByteAfterLastValidPacket, di = 0; di < unusedBytesCount; ++si, ++di) {
+            for (int si = firstByteAfterLastValidPacket, di = 0;
+                 di < unusedBytesCount;
+                 ++si, ++di) {
               readBuffer[di] = readBuffer[si];
             }
           }
@@ -248,6 +254,9 @@ public class BeastMessageParser {
     return result;
   }
 
+  /**
+   * Converts a hex string like "00FF0D" into an array of bytes.
+   */
   public static byte[] hexStringToByteArray(String string) {
     int len = string.length();
     byte[] data = new byte[len / 2];

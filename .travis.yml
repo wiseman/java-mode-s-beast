@@ -5,3 +5,10 @@ jdk:
   - oraclejdk7
   - oraclejdk8
 script: gradle --version && gradle check -i
+install:
+  - http://services.gradle.org/distributions/gradle-2.12-bin.zip
+  - unzip -qq gradle-2.12-bin.zip
+  - export GRADLE_HOME=$PWD/gradle-2.12
+  - export PATH=$GRADLE_HOME/bin:$PATH
+  - gradle -version
+  - gradle assemble

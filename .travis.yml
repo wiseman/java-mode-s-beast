@@ -4,4 +4,4 @@ jdk:
   - openjdk7
   - oraclejdk7
   - oraclejdk8
-script: gradle check -i
+script: gradle --version && gradle check -i

@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 
+/**
+ * This is a Java implementation of the parser from Virtual Radar Server.
+ */
 public class BeastMessageParser {
   static final int ESCAPE = 0x1A;
 

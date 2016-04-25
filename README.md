@@ -16,9 +16,3 @@ To run unit tests & check code style:
 ```
 gradle check
 ```
-
-To check code style:
-
-```
-gradle check
-```

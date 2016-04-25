@@ -9,3 +9,6 @@ install:
   - export PATH=$GRADLE_HOME/bin:$PATH
   - gradle -version
   - gradle assemble
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+

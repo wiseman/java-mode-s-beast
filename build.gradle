@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'checkstyle'
+apply plugin: 'jacoco'
 
 buildscript {
 }
@@ -16,4 +17,17 @@ dependencies {
 
 checkstyle {
     toolVersion = "6.17"
+}
+
+jacoco {
+    toolVersion = "0.7.5.201505241946"
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.enabled true
+        html.destination "${buildDir}/jacocoHtml"
+    }
 }

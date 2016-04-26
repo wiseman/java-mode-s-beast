@@ -10,4 +10,4 @@ install:
   - gradle -version
   - gradle assemble
 after_success:
-- ./gradlew jacocoTestReport coveralls
+- ./gradle jacocoTestReport coveralls

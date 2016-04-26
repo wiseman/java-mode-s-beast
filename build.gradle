@@ -1,9 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'checkstyle'
 apply plugin: 'jacoco'
-plugins {
-  id 'com.github.kt3k.coveralls' version '2.6.3'
-}
+apply plugin: 'com.github.kt3k.coveralls'
 
 buildscript {
 }

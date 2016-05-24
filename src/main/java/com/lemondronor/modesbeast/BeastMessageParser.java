@@ -9,20 +9,40 @@ import java.util.LinkedList;
  * This is a Java implementation of the parser from Virtual Radar Server.
  */
 public class BeastMessageParser {
-  static final int ESCAPE = 0x1A;
+
+  static final int BEAST_ESCAPE = 0x1A;
+  static final byte[] mlatGeneratedMessageTimestamp = new byte[] { (byte) 0xFF, 0x00, 0x4D, 0x4C, 0x41, 0x54 };
+
+  private class ExtractResult {
+    int endOfPacket;
+    int startOfPacket;
+    int dataLength;
+    int signalLevel;
+
+    ExtractResult(int endOfPacket, int startOfPacket, int dataLength,
+                  int signalLevel) {
+      this.endOfPacket = endOfPacket;
+      this.startOfPacket = startOfPacket;
+      this.dataLength = dataLength;
+      this.signalLevel = signalLevel;
+    }
+  }
 
   private byte[] readBuffer;
   private int readBufferLength;
   private byte[] payload;
+  private byte[] timestampBytes;
   private boolean sawFirstPacket;
   private boolean isBinaryFormat;
   private boolean hasParity;
   private boolean hasMlatPrefix;
+  private boolean isMlat;
   private byte avrMessageStartIndicator;
   private boolean streamFormatIsEstablished;
   private ByteBuffer extractedBytes;
 
   public BeastMessageParser() {
+    this.timestampBytes = new byte[6];
   }
 
   /**
@@ -51,16 +71,18 @@ public class BeastMessageParser {
       while (startOfPacket != -1 && startOfPacket < readBufferLength) {
         int endOfPacket;
         int dataLength = 0;
+        int signalLevel = -1;
         if (!isBinaryFormat) {
           endOfPacket = ArrayUtils.indexOf(readBuffer, (byte) ';', startOfPacket);
           if (endOfPacket >= (readBufferLength - startOfPacket)) {
             endOfPacket = ArrayUtils.INDEX_NOT_FOUND;
           }
         } else {
-          int[] extractResult = extractBinaryPayload(startOfPacket, dataLength);
-          endOfPacket = extractResult[0];
-          startOfPacket = extractResult[1];
-          dataLength = extractResult[2];
+          ExtractResult extractResult = extractBinaryPayload(startOfPacket, dataLength);
+          endOfPacket = extractResult.endOfPacket;
+          startOfPacket = extractResult.startOfPacket;
+          dataLength = extractResult.dataLength;
+          signalLevel = extractResult.signalLevel;
         }
         if (endOfPacket == -1) {
           break;
@@ -73,9 +95,11 @@ public class BeastMessageParser {
         }
 
         if (dataLength == 7 || dataLength == 14) {
-          ExtractedBytes extractedBytes = new ExtractedBytes(
-              Arrays.copyOf(payload, dataLength),
-              hasParity || isBinaryFormat);
+          ExtractedBytes extractedBytes = new ExtractedBytes()
+                                          .bytes(Arrays.copyOf(payload, dataLength))
+                                          .hasParity(hasParity || isBinaryFormat)
+                                          .signalLevel(signalLevel)
+                                          .isMlat(isMlat);
           result.add(extractedBytes);
         }
         startOfPacket = findStartIndex(firstByteAfterLastValidPacket);
@@ -154,22 +178,22 @@ public class BeastMessageParser {
   private boolean establishStreamFormat() {
     if (!streamFormatIsEstablished) {
       isBinaryFormat = ArrayUtils.indexOf(
-          readBuffer, (byte) ESCAPE, 0, readBufferLength) != ArrayUtils.INDEX_NOT_FOUND;
+          readBuffer, (byte) BEAST_ESCAPE, 0, readBufferLength) != ArrayUtils.INDEX_NOT_FOUND;
       if (isBinaryFormat) {
         streamFormatIsEstablished = true;
       } else if (readBufferLength > 22) {
         for (byte ch : readBuffer) {
           switch (ch) {
-            case 0x2a:
+            case 0x2a: // '*'
               streamFormatIsEstablished = true;
               hasParity = true;
               avrMessageStartIndicator = ch;
               break;
-            case 0x3a:
+            case 0x3a: // ':'
               streamFormatIsEstablished = true;
               avrMessageStartIndicator = ch;
               break;
-            case 0x40:
+            case 0x40: // '@'
               streamFormatIsEstablished = true;
               hasParity = true;
               hasMlatPrefix = true;
@@ -201,9 +225,9 @@ public class BeastMessageParser {
     } else {
       for (int i = start; i < readBufferLength; ++i) {
         byte ch = readBuffer[i];
-        if (ch == ESCAPE) {
+        if (ch == BEAST_ESCAPE) {
           if (++i < readBufferLength) {
-            if (readBuffer[i] != ESCAPE) {
+            if (readBuffer[i] != BEAST_ESCAPE) {
               result = i;
               break;
             }
@@ -214,7 +238,7 @@ public class BeastMessageParser {
     return result;
   }
 
-  private int[] extractBinaryPayload(int startOfPacket, int dataLength) {
+  private ExtractResult extractBinaryPayload(int startOfPacket, int dataLength) {
     dataLength = 0;
     switch (readBuffer[startOfPacket++]) {
       case 0x31:
@@ -233,15 +257,26 @@ public class BeastMessageParser {
     }
     int si = startOfPacket;
     int di = 0;
+    int signalLevel = -1;
+    isMlat = true;
     for (; si < readBufferLength && di < 7; ++si, ++di) {
       byte ch = readBuffer[si];
-      if (ch == ESCAPE && ++si > readBufferLength) {
+      if (ch == BEAST_ESCAPE && ++si > readBufferLength) {
         break;
+      }
+      if (di == 6) {
+        // Make sure, e.g., 0xFF gets converted into 255.
+        signalLevel = ch & 0xFF;
+      } else {
+        timestampBytes[di] = ch;
+        if (isMlat && ch != mlatGeneratedMessageTimestamp[di]) {
+          isMlat = false;
+        }
       }
     }
     for (di = 0; si < readBufferLength && di < dataLength; ++si) {
       byte ch = readBuffer[si];
-      if (ch == ESCAPE) {
+      if (ch == BEAST_ESCAPE) {
         if (++si >= readBufferLength) {
           break;
         }
@@ -250,11 +285,7 @@ public class BeastMessageParser {
       payload[di++] = ch;
     }
     int endOfPacket = di != dataLength ? ArrayUtils.INDEX_NOT_FOUND : si;
-    int[] result = new int[3];
-    result[0] = endOfPacket;
-    result[1] = startOfPacket;
-    result[2] = dataLength;
-    return result;
+    return new ExtractResult(endOfPacket, startOfPacket, dataLength, signalLevel);
   }
 
   /**

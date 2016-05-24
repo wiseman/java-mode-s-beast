@@ -50,11 +50,18 @@ public class BeastMessageParserTest {
       e1 = extracteds.get(0);
     }
     if (spec.extracted1 != null) {
-      assertNotNull(e1);
+      assertNotNull(spec.comment, e1);
       assertArrayEquals(
           desc(spec.comment, spec.extracted1, e1.getByteArray()),
           spec.extracted1, e1.getByteArray());
-      assertEquals(spec.hasParity1, e1.hasParity);
+      assertEquals(spec.comment, spec.hasParity1, e1.hasParity);
+      assertEquals(spec.comment, spec.badChecksum1, e1.badChecksum);
+      if (spec.signalLevel1 != null) {
+          assertEquals(spec.comment, spec.signalLevel1.intValue(), e1.signalLevel);
+      } else {
+          assertEquals(spec.comment, -1, e1.signalLevel);
+      }
+      assertEquals(spec.comment, spec.isMlat1, e1.isMlat);
     }
     ExtractedBytes e2 = null;
     if (extracteds.size() > 1) {
@@ -66,6 +73,13 @@ public class BeastMessageParserTest {
           desc(spec.comment, spec.extracted2, e2.getByteArray()),
           spec.extracted2, e2.getByteArray());
       assertEquals(spec.hasParity2, e2.hasParity);
+      assertEquals(spec.badChecksum2, e2.badChecksum);
+      if (spec.signalLevel2 != null) {
+          assertEquals(spec.signalLevel2.intValue(), e2.signalLevel);
+      } else {
+          assertEquals(-1, e2.signalLevel);
+      }
+      assertEquals(spec.isMlat2, e2.isMlat);
     } else {
       assertNull(e2);
     }

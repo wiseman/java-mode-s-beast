@@ -12,9 +12,13 @@ public class TestSpec {
   public byte[] extracted1;
   public Boolean hasParity1;
   public Boolean badChecksum1;
+  public Integer signalLevel1;
+  public Boolean isMlat1;
   public byte[] extracted2;
   public Boolean hasParity2;
   public Boolean badChecksum2;
+  public Integer signalLevel2;
+  public Boolean isMlat2;
   public String comment;
 
   /**
@@ -33,9 +37,13 @@ public class TestSpec {
       spec.extracted1 = parsePacket((String)desc.get("Extracted1"));
       spec.hasParity1 = (Boolean)desc.get("HasParity1");
       spec.badChecksum1 = (Boolean)desc.get("BadChecksum1");
+      spec.signalLevel1 = (Integer)desc.get("SignalLevel1");
+      spec.isMlat1 = (Boolean)desc.get("IsMlat1");
       spec.extracted2 = parsePacket((String)desc.get("Extracted2"));
       spec.hasParity2 = (Boolean)desc.get("HasParity2");
       spec.badChecksum2 = (Boolean)desc.get("BadChecksum2");
+      spec.signalLevel2 = (Integer)desc.get("SignalLevel2");
+      spec.isMlat2 = (Boolean)desc.get("IsMlat2");
       spec.comment = (String) desc.get("Comment");
       specs.add(spec);
     }

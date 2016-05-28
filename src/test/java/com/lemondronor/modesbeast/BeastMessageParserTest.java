@@ -26,10 +26,12 @@ public class BeastMessageParserTest {
    */
   @Parameterized.Parameters
   public static Collection<Object[]> loadTests() {
-    Collection<TestSpec> specs = TestSpec.readFromFile("beast-binary-test-cases.yaml");
+      Collection<TestSpec> specs = TestSpec.readFromFile("beast-binary-test-cases.yaml", true);
+      specs.addAll(TestSpec.readFromFile("beast-text-test-cases.yaml", false));
     return specs.stream()
-        .map(s -> new Object[] { s, null })
-        .collect(Collectors.toList());
+            // Junit parameters are <?, ?> pairs.
+            .map(s -> new Object[] { s, null })
+            .collect(Collectors.toList());
   }
 
   public BeastMessageParserTest(TestSpec spec, Object ignore) {
@@ -41,63 +43,33 @@ public class BeastMessageParserTest {
     TestSpec spec = testSpec;
     System.err.println("Test: " + spec.comment);
     BeastMessageParser parser = new BeastMessageParser();
-    ExtractedBytes e1 = null;
-    List<ExtractedBytes> extracteds = getExtractedBytesForPackets(
-        parser,
-        spec.packet1,
-        spec.packet2);
-    if (extracteds.size() > 0) {
-      e1 = extracteds.get(0);
-    }
-    if (spec.extracted1 != null) {
-      assertNotNull(spec.comment, e1);
-      assertArrayEquals(
-          desc(spec.comment, spec.extracted1, e1.getByteArray()),
-          spec.extracted1, e1.getByteArray());
-      assertEquals(spec.comment, spec.hasParity1, e1.hasParity);
-      assertEquals(spec.comment, spec.badChecksum1, e1.badChecksum);
-      if (spec.signalLevel1 != null) {
-          assertEquals(spec.comment, spec.signalLevel1.intValue(), e1.signalLevel);
-      } else {
-          assertEquals(spec.comment, -1, e1.signalLevel);
-      }
-      assertEquals(spec.comment, spec.isMlat1, e1.isMlat);
-    }
-    ExtractedBytes e2 = null;
-    if (extracteds.size() > 1) {
-      e2 = extracteds.get(1);
-    }
-    if (spec.extracted2 != null) {
-      assertNotNull(e2);
-      assertArrayEquals(
-          desc(spec.comment, spec.extracted2, e2.getByteArray()),
-          spec.extracted2, e2.getByteArray());
-      assertEquals(spec.hasParity2, e2.hasParity);
-      assertEquals(spec.badChecksum2, e2.badChecksum);
-      if (spec.signalLevel2 != null) {
-          assertEquals(spec.signalLevel2.intValue(), e2.signalLevel);
-      } else {
-          assertEquals(-1, e2.signalLevel);
-      }
-      assertEquals(spec.isMlat2, e2.isMlat);
-    } else {
-      assertNull(e2);
+    List<ExtractedBytes> expectedOutputs = spec.expectedOutputs;
+    List<ExtractedBytes> outputs = getExtractedBytesForPackets(parser, spec.inputs);
+    assertEquals(spec.comment, expectedOutputs.size(), outputs.size());
+
+    for (int i = 0; i < outputs.size(); i++) {
+        ExtractedBytes output = outputs.get(i);
+        ExtractedBytes expectedOutput = expectedOutputs.get(i);
+        assertArrayEquals(
+            desc(spec.comment,
+                 expectedOutput.getByteArray(),
+                 output.getByteArray()),
+            expectedOutput.getByteArray(), output.getByteArray());
+        assertEquals(spec.comment, expectedOutput.hasParity, output.hasParity);
+        assertEquals(spec.comment, expectedOutput.badChecksum, output.badChecksum);
+        assertEquals(spec.comment, expectedOutput.signalLevel, output.signalLevel);
+        assertEquals(spec.comment, expectedOutput.isMlat, output.isMlat);
     }
   }
 
   private List<ExtractedBytes> getExtractedBytesForPackets(
-      BeastMessageParser parser, byte[] packet1, byte[] packet2) {
-    Collection<ExtractedBytes> extracteds1 = parser.parse(packet1, 0, packet1.length);
-    Collection<ExtractedBytes> extracteds2 = null;
-    if (packet2 != null) {
-      extracteds2 = parser.parse(packet2, 0, packet2.length);
-    } else {
-      extracteds2 = new LinkedList<ExtractedBytes>();
-    }
-    Stream<ExtractedBytes> extracteds = Stream.concat(
-        extracteds1.stream(),
-        extracteds2.stream());
-    return extracteds.collect(Collectors.toList());
+      BeastMessageParser parser, Collection<byte[]> packets) {
+      List<ExtractedBytes> outputs = new LinkedList<>();
+      for (byte[] packet : packets) {
+          List<ExtractedBytes> extracteds = parser.parse(packet, 0, packet.length);
+          outputs.addAll(extracteds);
+      }
+      return outputs;
   }
 
   private String desc(String comment, byte[] bytes1, byte[] bytes2) {

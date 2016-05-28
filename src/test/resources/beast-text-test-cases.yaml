@@ -1,0 +1,22 @@
+-
+    Packet1: "*02E99619FACDAE;"
+    Packet2:
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: true
+    BadChecksum1: false
+    IsMlat1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Standard AVR format short frame
+-
+    Packet1: "1; *02E99619FACDAE;"
+    Packet2:
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: true
+    BadChecksum1: false
+    IsMlat1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Standard AVR format with garbage before start

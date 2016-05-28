@@ -2,7 +2,7 @@ package com.lemondronor.modesbeast;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 import java.util.LinkedList;
 
 /**
@@ -49,7 +49,7 @@ public class BeastMessageParser {
    * Scans a byte array for Mode S beast messages. Returns a
    * collection of extracted Mode S payloads.
    */
-  public Collection<ExtractedBytes> parse(byte[] bytes, int offset, int bytesRead) {
+  public List<ExtractedBytes> parse(byte[] bytes, int offset, int bytesRead) {
     LinkedList<ExtractedBytes> result = new LinkedList<>();
     int length = readBufferLength + bytesRead;
     if (readBuffer == null || length > readBuffer.length) {
@@ -74,9 +74,6 @@ public class BeastMessageParser {
         int signalLevel = -1;
         if (!isBinaryFormat) {
           endOfPacket = ArrayUtils.indexOf(readBuffer, (byte) ';', startOfPacket);
-          if (endOfPacket >= (readBufferLength - startOfPacket)) {
-            endOfPacket = ArrayUtils.INDEX_NOT_FOUND;
-          }
         } else {
           ExtractResult extractResult = extractBinaryPayload(startOfPacket, dataLength);
           endOfPacket = extractResult.endOfPacket;

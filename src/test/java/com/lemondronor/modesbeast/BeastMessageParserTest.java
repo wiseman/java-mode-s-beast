@@ -26,12 +26,12 @@ public class BeastMessageParserTest {
    */
   @Parameterized.Parameters
   public static Collection<Object[]> loadTests() {
-      Collection<TestSpec> specs = TestSpec.readFromFile("beast-binary-test-cases.yaml", true);
-      specs.addAll(TestSpec.readFromFile("beast-text-test-cases.yaml", false));
+    Collection<TestSpec> specs = TestSpec.readFromFile("beast-binary-test-cases.yaml", true);
+    specs.addAll(TestSpec.readFromFile("beast-text-test-cases.yaml", false));
     return specs.stream()
-            // Junit parameters are <?, ?> pairs.
-            .map(s -> new Object[] { s, null })
-            .collect(Collectors.toList());
+        // Junit parameters are <?, ?> pairs.
+        .map(s -> new Object[] { s, null })
+        .collect(Collectors.toList());
   }
 
   public BeastMessageParserTest(TestSpec spec, Object ignore) {
@@ -48,28 +48,28 @@ public class BeastMessageParserTest {
     assertEquals(spec.comment, expectedOutputs.size(), outputs.size());
 
     for (int i = 0; i < outputs.size(); i++) {
-        ExtractedBytes output = outputs.get(i);
-        ExtractedBytes expectedOutput = expectedOutputs.get(i);
-        assertArrayEquals(
-            desc(spec.comment,
-                 expectedOutput.getByteArray(),
-                 output.getByteArray()),
-            expectedOutput.getByteArray(), output.getByteArray());
-        assertEquals(spec.comment, expectedOutput.hasParity, output.hasParity);
-        assertEquals(spec.comment, expectedOutput.badChecksum, output.badChecksum);
-        assertEquals(spec.comment, expectedOutput.signalLevel, output.signalLevel);
-        assertEquals(spec.comment, expectedOutput.isMlat, output.isMlat);
+      ExtractedBytes output = outputs.get(i);
+      ExtractedBytes expectedOutput = expectedOutputs.get(i);
+      assertArrayEquals(
+          desc(spec.comment,
+               expectedOutput.getByteArray(),
+               output.getByteArray()),
+          expectedOutput.getByteArray(), output.getByteArray());
+      assertEquals(spec.comment, expectedOutput.hasParity, output.hasParity);
+      assertEquals(spec.comment, expectedOutput.badChecksum, output.badChecksum);
+      assertEquals(spec.comment, expectedOutput.signalLevel, output.signalLevel);
+      assertEquals(spec.comment, expectedOutput.isMlat, output.isMlat);
     }
   }
 
   private List<ExtractedBytes> getExtractedBytesForPackets(
       BeastMessageParser parser, Collection<byte[]> packets) {
-      List<ExtractedBytes> outputs = new LinkedList<>();
-      for (byte[] packet : packets) {
-          List<ExtractedBytes> extracteds = parser.parse(packet, 0, packet.length);
-          outputs.addAll(extracteds);
-      }
-      return outputs;
+    List<ExtractedBytes> outputs = new LinkedList<>();
+    for (byte[] packet : packets) {
+      List<ExtractedBytes> extracteds = parser.parse(packet, 0, packet.length);
+      outputs.addAll(extracteds);
+    }
+    return outputs;
   }
 
   private String desc(String comment, byte[] bytes1, byte[] bytes2) {

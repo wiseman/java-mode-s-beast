@@ -1,47 +1,26 @@
 -
-    Packet1: "*02E99619FACDAE;"
-    Packet2:
-    Extracted1: 02 E9 96 19 FA CD AE
-    HasParity1: true
-    BadChecksum1: false
-    IsMlat1: false
-    Extracted2:
-    HasParity2:
-    BadChecksum2:
-    Comment: Standard AVR format short frame
--
     Packet1: "1; *02E99619FACDAE;"
-    Packet2:
     Extracted1: 02 E9 96 19 FA CD AE
-    HasParity1: true
-    BadChecksum1: false
-    IsMlat1: false
-    Extracted2:
-    HasParity2:
-    BadChecksum2:
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
     Comment: Standard AVR format with garbage before start
 -
     Packet1: "*02E99619FA"
     Packet2: "CDAE;"
     Extracted1: 02 E9 96 19 FA CD AE
-    HasParity1: true
-    BadChecksum1: false
-    IsMlat1: false
-    Extracted2:
-    HasParity2:
-    BadChecksum2:
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
     Comment: Standard AVR format split over two blobs
 -
     Packet1: "*02E"
     Packet2: "99619FAC"
     Packet3: "DAE;"
     Extracted1: 02 E9 96 19 FA CD AE
-    HasParity1: true
-    BadChecksum1: false
-    IsMlat1: false
-    Extracted2:
-    HasParity2:
-    BadChecksum2:
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
     Comment: Standard AVR format split over three blobs
 -
     Packet1: "*02E99619FGCDAE;"
@@ -54,34 +33,351 @@
     Packet2: "CDAE;"
     Packet3: "*01020304050607;"
     Extracted1: 02 E9 96 19 FA CD AE
-    HasParity1: true
-    BadChecksum1: false
-    IsMlat1: false
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
     Extracted2: 01 02 03 04 05 06 07
-    HasParity2: true
-    BadChecksum2: false
-    IsMlat2: false
+    HasParity2: True
+    BadChecksum2: False
+    IsMlat2: False
     Comment: Two messages, first split over two blobs
 -
     Packet1: "*01020304050607; ## *A1A2A3A4A5A6A7;"
     Extracted1: 01 02 03 04 05 06 07
-    HasParity1: true
-    BadChecksum1: false
-    IsMlat1: false
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
     Extracted2: A1 A2 A3 A4 A5 A6 A7
-    HasParity2: true
-    BadChecksum2: false
-    IsMlat2: false
+    HasParity2: True
+    BadChecksum2: False
+    IsMlat2: False
     Comment: Two messages in the same blob
 -
     Packet1: "*01020304050607; ## *A1A2A"
     Packet2: "3A4A5A6A7;"
     Extracted1: 01 02 03 04 05 06 07
-    HasParity1: true
-    BadChecksum1: false
-    IsMlat1: false
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
     Extracted2: A1 A2 A3 A4 A5 A6 A7
-    HasParity2: true
-    BadChecksum2: false
-    IsMlat2: false
+    HasParity2: True
+    BadChecksum2: False
+    IsMlat2: False
     Comment: Two messages, second spread over two blobs
+-
+    Packet1: "*0000;"
+    Comment: Mode-A or Mode-C message
+-
+    Packet1: "*0102030405060;"
+    Comment: Short frame with missing character
+-
+    Packet1: "*010203040506070;"
+    Comment: Short frame with extra character
+-
+    Packet1: "*0102030405060708;"
+    Comment: Short frame + 1 byte
+-
+    Packet1: "*010203040506;"
+    Comment: Short frame - 1 byte
+-
+    Packet1: "*0102030405060708090a0b0c0;"
+    Comment: Long frame with missing character
+-
+    Packet1: "*0102030405060708090a0b0c0d0e0;"
+    Comment: Long frame with extra character
+-
+    Packet1: "*0102030405060708090a0b0c0d0e0f10;"
+    Comment: Long frame +1 byte
+-
+    Packet1: "*0102030405060708090a0b0c0d;"
+    Comment: Long frame -1 byte
+-
+    Packet1: "*0000; *02E99619FACDAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
+    Comment: Mode-A/C followed by short frame
+-
+    Packet1: ":02E99619FACDAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: False
+    BadChecksum1: False
+    IsMlat1: False
+    Comment: Standard AVR format short frame, parity already stripped
+-
+    Packet1: "1; :02E99619FACDAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: False
+    BadChecksum1: False
+    IsMlat1: False
+    Comment: Standard AVR format with garbage before start, parity already stripped
+-
+    Packet1: ":02E99619FA"
+    Packet2: "CDAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: False
+    BadChecksum1: False
+    IsMlat1: False
+    Comment: Standard AVR format split over two blobs, parity already stripped
+-
+    Packet1: ":02E"
+    Packet2: "99619FAC"
+    Packet3: "DAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: False
+    BadChecksum1: False
+    IsMlat1: False
+    Comment: Standard AVR format split over three blobs, parity already stripped
+-
+    Packet1: ":02E99619FGCDAE;"
+    Comment: Standard AVR format with invalid hex digit in high nibble, parity already stripped
+-
+    Packet1: ":02E99619FAGDAE;"
+    Comment: Standard AVR format with invalid hex digit in low nibble, parity already stripped
+-
+    Packet1: ":02E99619FA"
+    Packet2: "CDAE;"
+    Packet3: ":01020304050607;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: False
+    BadChecksum1: False
+    IsMlat1: False
+    Extracted2: 01 02 03 04 05 06 07
+    HasParity2: False
+    BadChecksum2: False
+    IsMlat2: False
+    Comment: Two messages, first split over two blobs, parity already stripped
+-
+    Packet1: ":01020304050607; ## :A1A2A3A4A5A6A7;"
+    Extracted1: 01 02 03 04 05 06 07
+    HasParity1: False
+    BadChecksum1: False
+    IsMlat1: False
+    Extracted2: A1 A2 A3 A4 A5 A6 A7
+    HasParity2: False
+    BadChecksum2: False
+    IsMlat2: False
+    Comment: Two messages in the same blob, parity already stripped
+-
+    Packet1: ":01020304050607; ## :A1A2A"
+    Packet2: "3A4A5A6A7;"
+    Extracted1: 01 02 03 04 05 06 07
+    HasParity1: False
+    BadChecksum1: False
+    IsMlat1: False
+    Extracted2: A1 A2 A3 A4 A5 A6 A7
+    HasParity2: False
+    BadChecksum2: False
+    IsMlat2: False
+    Comment: Two messages, second spread over two blobs, parity already stripped
+-
+    Packet1: ":0000;"
+    Comment: Mode-A or Mode-C message, parity already stripped
+-
+    Packet1: ":0102030405060;"
+    Comment: Short frame with missing character, parity already stripped
+-
+    Packet1: ":010203040506070;"
+    Comment: Short frame with extra character, parity already stripped
+-
+    Packet1: ":0102030405060708;"
+    Comment: Short frame + 1 byte, parity already stripped
+-
+    Packet1: ":010203040506;"
+    Comment: Short frame - 1 byte, parity already stripped
+-
+    Packet1: ":0102030405060708090a0b0c0;"
+    Comment: Long frame with missing character, parity already stripped
+-
+    Packet1: ":0102030405060708090a0b0c0d0e0;"
+    Comment: Long frame with extra character, parity already stripped
+-
+    Packet1: ":0102030405060708090a0b0c0d0e0f10;"
+    Comment: Long frame +1 byte, parity already stripped
+-
+    Packet1: ":0102030405060708090a0b0c0d;"
+    Comment: Long frame -1 byte, parity already stripped
+-
+    Packet1: ":0000; :02E99619FACDAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: False
+    BadChecksum1: False
+    IsMlat1: False
+    Comment: Mode-A/C followed by short frame, parity already stripped
+-
+    Packet1: "*01020304050607;:91929394959697;"
+    Extracted1: 01 02 03 04 05 06 07
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
+    Comment: Short frame with parity followed by short frame without parity
+-
+    Packet1: "@01020304050602E99619FACDAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
+    Comment: Standard AVR format short frame, mlat timing prefix
+-
+    Packet1: "1; @01020304050602E99619FACDAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
+    Comment: Standard AVR format with garbage before start, mlat timing prefix
+-
+    Packet1: "@01020304050602E99619FA"
+    Packet2: "CDAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
+    Comment: Standard AVR format split over two blobs, mlat timing prefix
+-
+    Packet1: "@01020304050602E"
+    Packet2: "99619FAC"
+    Packet3: "DAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
+    Comment: Standard AVR format split over three blobs, mlat timing prefix
+-
+    Packet1: "@01020304050602E99619FGCDAE;"
+    Comment: Standard AVR format with invalid hex digit in high nibble, mlat timing prefix
+-
+    Packet1: "@01020304050602E99619FAGDAE;"
+    Comment: Standard AVR format with invalid hex digit in low nibble, mlat timing prefix
+-
+    Packet1: "@01020304050602E99619FA"
+    Packet2: "CDAE;"
+    Packet3: "@01020304050601020304050607;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
+    Extracted2: 01 02 03 04 05 06 07
+    HasParity2: True
+    BadChecksum2: False
+    IsMlat2: False
+    Comment: Two messages, first split over two blobs, mlat timing prefix
+-
+    Packet1: "@01020304050601020304050607; ## @010203040506A1A2A3A4A5A6A7;"
+    Extracted1: 01 02 03 04 05 06 07
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
+    Extracted2: A1 A2 A3 A4 A5 A6 A7
+    HasParity2: True
+    BadChecksum2: False
+    IsMlat2: False
+    Comment: Two messages in the same blob, mlat timing prefix
+-
+    Packet1: "@01020304050601020304050607; ## @010203040506A1A2A"
+    Packet2: "3A4A5A6A7;"
+    Extracted1: 01 02 03 04 05 06 07
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
+    Extracted2: A1 A2 A3 A4 A5 A6 A7
+    HasParity2: True
+    BadChecksum2: False
+    IsMlat2: False
+    Comment: Two messages, second spread over two blobs, mlat timing prefix
+-
+    Packet1: "@0102030405060000;"
+    Comment: Mode-A or Mode-C message, mlat timing prefix
+-
+    Packet1: "@0102030405060102030405060;"
+    Comment: Short frame with missing character, mlat timing prefix
+-
+    Packet1: "@010203040506010203040506070;"
+    Comment: Short frame with extra character, mlat timing prefix
+-
+    Packet1: "@0102030405060102030405060708;"
+    Comment: Short frame + 1 byte, mlat timing prefix
+-
+    Packet1: "@010203040506010203040506;"
+    Comment: Short frame - 1 byte, mlat timing prefix
+-
+    Packet1: "@0102030405060102030405060708090a0b0c0;"
+    Comment: Long frame with missing character, mlat timing prefix
+-
+    Packet1: "@0102030405060102030405060708090a0b0c0d0e0;"
+    Comment: Long frame with extra character, mlat timing prefix
+-
+    Packet1: "@0102030405060102030405060708090a0b0c0d0e0f10;"
+    Comment: Long frame +1 byte, mlat timing prefix
+-
+    Packet1: "@0102030405060102030405060708090a0b0c0d;"
+    Comment: Long frame -1 byte, mlat timing prefix
+-
+    Packet1: "@0102030405060000; @01020304050602E99619FACDAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
+    Comment: Mode-A/C followed by short frame, mlat timing prefix
+-
+    Packet1: "@010203"
+    Packet2: "040506A1A2A3"
+    Packet3: "A4A5A6A7;"
+    Extracted1: A1 A2 A3 A4 A5 A6 A7
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
+    Comment: Mlat timing prefix frame spread over three blobs
+-
+    Packet1: "@010203040506:01020304050607;"
+    Comment: Truncated mlat timing prefix followed by short avr with parity stripped
+-
+    Packet1: "@01020405; @01020304050691929394959697;"
+    Extracted1: 91 92 93 94 95 96 97
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
+    Comment: Truncated mlat timing prefix followed by complete mlat timing prefix
+-
+    Packet1: "*01020304;*01020304;"
+    Packet2: "*010203"
+    Packet3: "04050607;"
+    Extracted1: 01 02 03 04 05 06 07
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: False
+    Comment: Second packet could incur buffer overrun if reading trailing bytes from previous packet
+-
+    Packet1: "@FF004D4C415402E99619FACDAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: True
+    Comment: Timestamp indicates that the message was generated by an MLAT client with MLAT derived position
+-
+    Packet1: "@FF004D4C41"
+    Packet2: "5402E99619FACDAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: True
+    Comment: Timestamp and message split over packets
+-
+    Packet1: "@FF004D4C4154"
+    Packet2: "02E99619FACDAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: True
+    Comment: Timestamp and message split over packets
+-
+    Packet1: "@FF004D4C415402E99619FACDAE; ## @01020304050602E99619FACDAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: True
+    BadChecksum1: False
+    IsMlat1: True
+    Extracted2: 02 E9 96 19 FA CD AE
+    HasParity2: True
+    BadChecksum2: False
+    IsMlat2: False
+    Comment: MLAT derived message followed by non-MLAT derived message

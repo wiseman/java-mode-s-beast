@@ -20,3 +20,68 @@
     HasParity2:
     BadChecksum2:
     Comment: Standard AVR format with garbage before start
+-
+    Packet1: "*02E99619FA"
+    Packet2: "CDAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: true
+    BadChecksum1: false
+    IsMlat1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Standard AVR format split over two blobs
+-
+    Packet1: "*02E"
+    Packet2: "99619FAC"
+    Packet3: "DAE;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: true
+    BadChecksum1: false
+    IsMlat1: false
+    Extracted2:
+    HasParity2:
+    BadChecksum2:
+    Comment: Standard AVR format split over three blobs
+-
+    Packet1: "*02E99619FGCDAE;"
+    Comment: Standard AVR format with invalid hex digit in high nibble
+-
+    Packet1: "*02E99619FAGDAE;"
+    Comment: Standard AVR format with invalid hex digit in low nibble
+-
+    Packet1: "*02E99619FA"
+    Packet2: "CDAE;"
+    Packet3: "*01020304050607;"
+    Extracted1: 02 E9 96 19 FA CD AE
+    HasParity1: true
+    BadChecksum1: false
+    IsMlat1: false
+    Extracted2: 01 02 03 04 05 06 07
+    HasParity2: true
+    BadChecksum2: false
+    IsMlat2: false
+    Comment: Two messages, first split over two blobs
+-
+    Packet1: "*01020304050607; ## *A1A2A3A4A5A6A7;"
+    Extracted1: 01 02 03 04 05 06 07
+    HasParity1: true
+    BadChecksum1: false
+    IsMlat1: false
+    Extracted2: A1 A2 A3 A4 A5 A6 A7
+    HasParity2: true
+    BadChecksum2: false
+    IsMlat2: false
+    Comment: Two messages in the same blob
+-
+    Packet1: "*01020304050607; ## *A1A2A"
+    Packet2: "3A4A5A6A7;"
+    Extracted1: 01 02 03 04 05 06 07
+    HasParity1: true
+    BadChecksum1: false
+    IsMlat1: false
+    Extracted2: A1 A2 A3 A4 A5 A6 A7
+    HasParity2: true
+    BadChecksum2: false
+    IsMlat2: false
+    Comment: Two messages, second spread over two blobs

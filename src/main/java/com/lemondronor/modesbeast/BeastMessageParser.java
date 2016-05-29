@@ -215,7 +215,7 @@ public class BeastMessageParser {
     int result = ArrayUtils.INDEX_NOT_FOUND;
     if (!isBinaryFormat) {
       result = ArrayUtils.indexOf(
-          readBuffer, avrMessageStartIndicator, start, readBufferLength - start);
+          readBuffer, avrMessageStartIndicator, start, readBufferLength);
       if (result != ArrayUtils.INDEX_NOT_FOUND) {
         result += 1;
       }

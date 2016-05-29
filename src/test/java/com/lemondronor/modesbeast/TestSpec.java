@@ -24,13 +24,19 @@ public class TestSpec {
       TestSpec spec = new TestSpec();
       spec.comment = (String) desc.get("Comment");
       LinkedList<byte[]> inputs = new LinkedList<byte[]>();
+      boolean isFirstPacket = true;
       for (int i = 1; i <= 3; i++) {
         String inputSpec = (String)desc.get("Packet" + i);
         if (inputSpec != null) {
           if (isBinary) {
             inputs.add(parsePacket(inputSpec));
           } else {
-            inputs.add(prependPacket(inputSpec.getBytes()));
+            byte[] bytes = inputSpec.getBytes();
+            if (isFirstPacket) {
+              bytes = prependPacket(bytes);
+              isFirstPacket = false;
+            }
+            inputs.add(bytes);
           }
         }
       }

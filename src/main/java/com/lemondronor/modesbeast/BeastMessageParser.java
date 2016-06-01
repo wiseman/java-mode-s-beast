@@ -12,6 +12,7 @@ public class BeastMessageParser {
 
   static final int BEAST_ESCAPE = 0x1A;
   static final byte[] mlatGeneratedMessageTimestamp = new byte[] { (byte) 0xFF, 0x00, 0x4D, 0x4C, 0x41, 0x54 };
+  static final int maximumBufferSize = 10000;
 
   private class ExtractResult {
     int endOfPacket;
@@ -52,6 +53,10 @@ public class BeastMessageParser {
   public List<ExtractedBytes> parse(byte[] bytes, int offset, int bytesRead) {
     LinkedList<ExtractedBytes> result = new LinkedList<>();
     int length = readBufferLength + bytesRead;
+    if (length > maximumBufferSize) {
+      readBufferLength = 0;
+      length = bytesRead;
+    }
     if (readBuffer == null || length > readBuffer.length) {
       byte[] newReadBuffer = new byte[length];
       if (readBuffer != null) {
@@ -73,7 +78,7 @@ public class BeastMessageParser {
         int dataLength = 0;
         int signalLevel = -1;
         if (!isBinaryFormat) {
-          endOfPacket = ArrayUtils.indexOf(readBuffer, (byte) ';', startOfPacket);
+          endOfPacket = ArrayUtils.indexOf(readBuffer, (byte) ';', startOfPacket, readBufferLength);
         } else {
           ExtractResult extractResult = extractBinaryPayload(startOfPacket, dataLength);
           endOfPacket = extractResult.endOfPacket;
@@ -90,7 +95,6 @@ public class BeastMessageParser {
         if (!isBinaryFormat) {
           dataLength = extractAvrPayload(startOfPacket, endOfPacket, dataLength);
         }
-
         if (dataLength == 7 || dataLength == 14) {
           ExtractedBytes extractedBytes = new ExtractedBytes()
                                           .bytes(Arrays.copyOf(payload, dataLength))

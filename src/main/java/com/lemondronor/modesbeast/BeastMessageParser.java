@@ -126,9 +126,20 @@ public class BeastMessageParser {
       int actualStartOfPacket = startOfPacket + 12;
       if (actualStartOfPacket >= readBufferLength) {
         actualStartOfPacket = endOfPacket;
-      } else if (!convertAsciiHexDigits(null, startOfPacket, actualStartOfPacket)) {
-        actualStartOfPacket = endOfPacket;
+      } else {
+        if (!convertAsciiHexDigits(timestampBytes, startOfPacket, actualStartOfPacket)) {
+          actualStartOfPacket = endOfPacket;
+        } else {
+          isMlat = true;
+          for (int i = 0; i < timestampBytes.length; ++i) {
+            if (timestampBytes[i] != mlatGeneratedMessageTimestamp[i]) {
+              isMlat = false;
+              break;
+            }
+          }
+        }
       }
+      startOfPacket = actualStartOfPacket;
     }
     dataLength = endOfPacket - startOfPacket;
     dataLength = (dataLength & 1) == 1 ? -1 : dataLength / 2;

@@ -1,7 +1,6 @@
 # java-mode-s-beast
 
-[![Build Status](https://travis-ci.org/wiseman/java-mode-s-beast.svg?branch=master)](https://travis-ci.org/wiseman/java-mode-s-beast)[![codecov](https://codecov.io/gh/wiseman/java-mode-s-beast/branch/master/graph/badge.svg)](https://codecov.io/gh/wiseman/java-mode-s-beast)
-
+[![Build Status](https://travis-ci.org/wiseman/java-mode-s-beast.svg?branch=master)](https://travis-ci.org/wiseman/java-mode-s-beast)[![Coverage Status](https://coveralls.io/repos/github/wiseman/java-mode-s-beast/badge.svg?branch=master)](https://coveralls.io/github/wiseman/java-mode-s-beast?branch=master)
 
 This is a Java library that decodes Mode-S Beast messages containing
 Mode S/ADS-B information.

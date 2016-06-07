@@ -9,7 +9,7 @@ apply plugin: 'checkstyle'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 apply plugin: 'maven'
-apply plugin: 'maven-publish'
+apply from: 'maven-push.gradle'
 
 repositories {
   mavenCentral()
@@ -37,16 +37,3 @@ jacocoTestReport {
 }
 
 check.dependsOn jacocoTestReport
-
-group = 'com.lemondronor'
-version = '1.0.0'
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            artifactId 'modesbeast'
-
-            from components.java
-        }
-    }
-}

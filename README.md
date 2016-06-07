@@ -8,6 +8,8 @@ Mode S/ADS-B information.
 The decoder is primarily a Java port of the C# code in
 [Virtual Radar Server](http://www.virtualradarserver.co.uk/).
 
+You can get it from Maven Central as `[com.lemondronor/modesbeast 0.0.1]`.
+
 ## Development
 
 To run unit tests & check code style:

@@ -17,7 +17,7 @@ To run unit tests & check code style:
 gradle check
 ```
 
-To upload to OSSRH/Central Repository:
+To publish to OSSRH/Central Repository:
 
 ```
 gradle uploadArchives
